@@ -18,4 +18,30 @@ for row in albums.find_all('tr'):
         row_data.append(cell.text)
     data.append(row_data)
 
-print(data)
+dataLength = len(data)
+print('Table length:' + str(dataLength))
+
+print('First element:')
+print(data[0])
+
+print('Second element:')
+print(data[1])
+
+print('Third element:')
+print(data[2])
+
+print('Penultimate element:')
+print(data[dataLength-2])
+
+print('Last element:')
+print(data[dataLength-1])
+
+print('Third Element, Second Index:')
+print(data[2][1])
+
+print('Fourth Element, Second Index:')
+print(data[3][1])
+
+print('Fifth Element, Second Index:')
+print(data[4][1])
+
