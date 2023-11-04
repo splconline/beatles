@@ -25,3 +25,31 @@ n = len(rows)
 for i in range(2, n-1, 1):
     url = rows[i].find('a', href=True)
     print(url['href'])
+
+# TODO function call
+"""
+# Initialise (OUTSIDE LOOP)
+   result = []
+
+# get the tracks in an album
+   tracks = retrieve_tracks(wikiURL,album_name, album_date)
+
+# add tracks to result
+   for track in tracks:
+       add track to result
+
+"""
+
+"""
+def retrieve_tracks(url,name,date):
+    goto wikipedia.org/url and retrieve the soup
+    tracklist = []
+    side = A
+    last track number = 0
+    for each track in the soup:
+        track = []
+        if track number > last track number side = B
+        to track add: side, track number, track title, album_name, album_date, ""
+        add track to tracklist
+        last track number = track number
+    return tracklist
