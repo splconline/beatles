@@ -18,19 +18,37 @@ def get_tracks(url,album):
 # Find the track listing tables
     tablesides = exsoup.find_all("table", {"class": "tracklist"})
 
-# How many sides?
-    print("Sides:", len(tablesides))
-
-# Extract the data
+# Extract the data from the first two sides (problem for White Album
+# with 4 x sides, will sort this out later)
     data = []
-    for row in tablesides[1].find_all('tr'):
+
+    side = 'A'
+    rows = tablesides[0].find_all('tr')
+# Loop through all rows except the first and last ones
+    for i in range(1,len(rows)-1):
         row_data = []
-        for cell in row.contents:
+        for cell in rows[i].contents:
             row_data.append(cell.text)
         row_data.append(album)
+        row_data.append(side)
         data.append(row_data)
-    return data
+    
 
+    side = 'B'
+    rows = tablesides[1].find_all('tr')
+# Loop through all rows except the first and last ones
+    for i in range(1,len(rows)-1):
+        row_data = []
+        for cell in rows[i].contents:
+            row_data.append(cell.text)
+        row_data.append(album)
+        row_data.append(side)
+        data.append(row_data)
+
+    return data
+# END def get_tracks
+
+# BEGIN main
 test = get_tracks("https://en.wikipedia.org/wiki/A_Hard_Day's_Night_(album)", "A Hard Day's Night")
 print(test)
 exit()
