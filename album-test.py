@@ -27,6 +27,7 @@ for i in range(2, n-1, 1):
     print(url['href'])
 
 # TODO function call
+
 """
 # Initialise (OUTSIDE LOOP)
    result = []
@@ -38,9 +39,6 @@ for i in range(2, n-1, 1):
    for track in tracks:
        add track to result
 
-"""
-
-"""
 def retrieve_tracks(url,name,date):
     goto wikipedia.org/url and retrieve the soup
     tracklist = []
@@ -53,3 +51,4 @@ def retrieve_tracks(url,name,date):
         add track to tracklist
         last track number = track number
     return tracklist
+"""
