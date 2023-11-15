@@ -1,5 +1,49 @@
 import requests, bs4
 
+# Define a function that returns the required data, given the URL & album name
+def get_tracks(url,album):
+
+# Open the URL
+    exfile = requests.get(url)
+    exfile.raise_for_status()
+
+# Soup it
+    exsoup = bs4.BeautifulSoup(exfile.text,'html.parser')
+
+# Find the track listing tables
+    tablesides = exsoup.find_all("table", {"class": "tracklist"})
+
+# Extract the data from the first two sides (problem for White Album
+# with 4 x sides, will sort this out later)
+    data = []
+
+    side = 'A'
+    rows = tablesides[0].find_all('tr')
+# Loop through all rows except the first and last ones
+    for i in range(1,len(rows)-1):
+        row_data = []
+        for cell in rows[i].contents:
+            row_data.append(cell.text)
+        row_data.append(album)
+        row_data.append(side)
+        data.append(row_data)
+    
+
+    side = 'B'
+    rows = tablesides[1].find_all('tr')
+# Loop through all rows except the first and last ones
+    for i in range(1,len(rows)-1):
+        row_data = []
+        for cell in rows[i].contents:
+            row_data.append(cell.text)
+        row_data.append(album)
+        row_data.append(side)
+        data.append(row_data)
+
+    return data
+# END def get_tracks
+
+# MAIN
 # Open the URL
 # (Tested on Beatles, Queen, Miles Davis (Columbia only))
 exfile = requests.get("https://en.wikipedia.org/wiki/The_Beatles_discography")
@@ -12,43 +56,17 @@ exsoup = bs4.BeautifulSoup(exfile.text,'html.parser')
 # be the UK albums, for Miles Davis will be the Columbia albums etc.)
 albums = exsoup.find("table", {"class": "wikitable plainrowheaders"})
 
-# Extracting the data we found that for class 'wikitable plainrowheaders' in an artist page:
-#
-# * Listing elements 1,2,3, n-1 and n shows that album names are in element 3 to n-1
-# * The lbum title is in the second index
-#
-# Therefore, the following gets the URLs of all albums:
-
+# Album names are in element 3 to n-1 & the album title is in the first <a>
+result = []
 rows = albums.find_all('tr')
 n = len(rows)
 
 for i in range(2, n-1, 1):
     url = rows[i].find('a', href=True)
-    print(url['href'])
+#    print(url.text)
+#    print(url['href'])
+    tracks = get_tracks("https://en.wikipedia.org/" + url['href'], url.text)
+    result.extend(tracks)
 
-# TODO function call
-
-"""
-# Initialise (OUTSIDE LOOP)
-   result = []
-
-# get the tracks in an album
-   tracks = retrieve_tracks(wikiURL,album_name, album_date)
-
-# add tracks to result
-   for track in tracks:
-       add track to result
-
-def retrieve_tracks(url,name,date):
-    goto wikipedia.org/url and retrieve the soup
-    tracklist = []
-    side = A
-    last track number = 0
-    for each track in the soup:
-        track = []
-        if track number > last track number side = B
-        to track add: side, track number, track title, album_name, album_date, ""
-        add track to tracklist
-        last track number = track number
-    return tracklist
-"""
+for track in result:
+    print(track)
